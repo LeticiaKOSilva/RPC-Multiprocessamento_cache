@@ -1,0 +1,16 @@
+#NÃO ESTÁ MAIS NO CÓDIGO
+#Retorno das listas de primos utilizados no primeiro teste
+
+result = client.is_primes([1,2,3,4,5,6])
+print(result) 
+
+  def is_primes(self, *numbers) -> str:
+        vetor = []
+
+        for number in numbers:
+            if self.is_prime(int(number)):
+                vetor.append("True")
+            else:
+                vetor.append("False")
+    
+        return ",".join(vetor)  # Envia uma única string com os resultados separados por vírgula
