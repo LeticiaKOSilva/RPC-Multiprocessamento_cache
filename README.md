@@ -12,4 +12,7 @@
     - server.py: import rpc from Server;
 - O código possui multiprocessos, o servidor pode atender a mais de um cliente por criar uma thread para cada um desses clientes;
 - O cache é um dicionário que é criado logo no construtor do lado do cliente onde primeiro se verifica se o método existe no cache se não existir ele o salva se existir ele o chama;
-- Pra verificar a eficiência do multiprocessamento é feito uma verificação numa lista de números que verifica se um valor é primo ou não e retorna uma lista de booleanos, essa verificação e feita com e sem multiprocessamento e através da biblioteca time conseguimos calcular o tempo de execução de ambas as formas. 
+- Pra verificar a eficiência do multiprocessamento é feito uma verificação numa lista de números que verifica se um valor é primo ou não e retorna uma lista de booleanos, essa verificação e feita com e sem multiprocessamento e através da biblioteca time conseguimos calcular o tempo de execução de ambas as formas.
+- Agora com a ajuda da classe Cache disponível no arquivo disc.py foi feito um cache em disco, onde:
+  - Uma variável verifica o tempo em que o cache em disco será atualizado;
+  - É outra variável que delimita um tamanho de cache, onde quando este limite e ultrapassado o cache mais antigo é excluído.
