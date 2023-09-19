@@ -2,7 +2,7 @@
 ### ->Realizando operações e verificando através da medida de tempo se o multiprocessamento é mais rápido ou não, além da utilização de um cache para facilitar a rapidez do acesso a um método já chamado anteriormente.
 
 - O programa foi feito utilizando a linguagem Python;
-- As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing;
+- As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
 - Foram criadas 2 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
    - Uma classe Servder que fornece métodos para manipular os dados vindos do cliente, processá-las e devolve-las ao cliente;
@@ -16,3 +16,9 @@
 - Agora com a ajuda da classe Cache disponível no arquivo disc.py foi feito um cache em disco, onde:
   - Uma variável verifica o tempo em que o cache em disco será atualizado;
   - É outra variável que delimita um tamanho de cache, onde quando este limite e ultrapassado o cache mais antigo é excluído.
+- O novo método da classe Client last_news_if_barbacena tem como função retornar ao cliente uma lista com o número de notícias que deseja extrair do site (https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}).
+- O arquivo requests.py tem várias funções que tem como objetivos principais:
+   - Fazer uma requisição uma requisição no site para extrair seu html;
+   - Pegar do código html o título e o link de cada notícia;
+   - Formata-las em título e link;
+   - E retornar em forma de lista.
