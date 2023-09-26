@@ -1,7 +1,7 @@
 import pickle
 import os
 import re
-from datetime import datetime, timedelta  # Adicione essa importação
+from datetime import datetime, timedelta
 from requests import get_titles
 
 CACHE_FILE_NAME = 'cache.txt'
