@@ -22,3 +22,6 @@
    - Pegar do código html o título e o link de cada notícia;
    - Formata-las em título e link;
    - E retornar em forma de lista.
+- O método def last_news_if_barbacena(self, qtd_noticias: int) -> [], deve além de adicionar ao cache as notícias solicitadas como:
+     - Considerar que toda vez que for solicitado uma nova quantidade de notícias, verificar se no cache já existe uma solicitação igual ou maior a essa. Por isso se existir ele retorna os dados correspondentes ao número solicitado pelo usuário;
+     - De 5 em 5 minutos ele deve ir ao site (https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}) e atualizar o cache com as novas notícias.
