@@ -1,5 +1,8 @@
 import pickle
 import os
+import re
+from datetime import datetime, timedelta  # Adicione essa importação
+from requests import get_titles
 
 CACHE_FILE_NAME = 'cache.txt'
 
@@ -30,11 +33,48 @@ class Cache:
     def get(self, key):
         return self.cache.get(key)
 
+    def is_cache_outdated(self, data_str):
+        if data_str in self.cache:
+            last_update_time = self.cache[data_str].get('last_updated')
+            if last_update_time:
+                current_time = datetime.now()
+                return (current_time - last_update_time) > timedelta(minutes=5)
+        return True
+
+    def update_last_updated_time(self):
+        self.cache['last_updated'] = datetime.now()
+        self.export_cache()
+
+    def get_or_fetch_news(self, data_str, qtd_noticias):
+        if self.is_cache_outdated(data_str):
+            new_news = self.fetch_and_update_cache(data_str, qtd_noticias)
+            return new_news
+        else:
+            return self.get_v(data_str, qtd_noticias)
+
+    def fetch_and_update_cache(self, data_str, qtd_noticias):
+        new_news = self.fetch_news_from_website(qtd_noticias)
+        self.cache[data_str] = {
+            'last_updated': datetime.now(),
+            data_str: new_news
+        }
+        self.export_cache()
+        return new_news
+
+    def get_v(self, data_str, quantidade):
+        cached_news = self.cache.get(data_str, {}).get('conteudo', [])
+        if cached_news and len(cached_news) >= quantidade:
+            return cached_news[:quantidade]
+        else:
+            return []
+
     def set(self, key, value):
         if len(self.cache) >= 5:
             self.update_first_line(key,value)
-        else :
+            self.update_last_updated_time()
+        else:
             self.cache[key] = value
+            self.update_last_updated_time()
             self.export_cache()
 
     def remove(self, key):
@@ -67,7 +107,6 @@ class Cache:
 
                 self.export_cache()
 
-
-
-
-
+    def fetch_news_from_website(self, qtd_noticias):
+        return get_titles(qtd_noticias)
+    

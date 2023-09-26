@@ -93,14 +93,25 @@ class Client:
 
     def last_news_if_barbacena(self, qtd_noticias: int) -> []:
         data_str = f"{LAST_NEWS_IF_BARBACENA},{qtd_noticias}"
-        result = self.cache.get(data_str)
+        news_items = self.cache.get(data_str)
 
-        if result is not None:
-            return result
+        if self.cache.is_cache_outdated(data_str):
+            # Se a quantidade desejada é maior que a do cache, buscar no site
+            news_items = get_titles(qtd_noticias)
+            self.cache.set(data_str, news_items)  # Atualiza o cache
+        elif news_items is not None:
+            news_items = self.cache.get_v(data_str,qtd_noticias)
+            if len(news_items) > 0 :
+                self.cache.set(data_str, news_items)  # Atualiza o cache
+            else:
+                # Se a quantidade desejada é maior que a do cache, buscar no site
+                news_items = get_titles(qtd_noticias)
+                self.cache.set(data_str, news_items)  # Atualiza o cache
         else:
-            result = get_titles(qtd_noticias)
-            self.cache.set(data_str, result)
-            return result
+            # Se a quantidade desejada é maior que a do cache, buscar no site
+                news_items = get_titles(qtd_noticias)
+                self.cache.set(data_str, news_items)  # Atualiza o cache
+        return news_items
 
 class Server:
     def __init__(self, host: str, port: int):

@@ -1,8 +1,10 @@
 import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
+import concurrent.futures as cf
+import os
 
-URL_SITE = "https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}"
+URL_SITE = "https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int="
 
 # Função assíncrona para buscar títulos de notícias
 async def fetch_news_titles(session, page_url, qtd_noticias):
@@ -26,23 +28,29 @@ async def fetch_news_titles(session, page_url, qtd_noticias):
         return news_items
 
 # Função assíncrona para coletar títulos de notícias
-async def collect_news_titles(qtd_noticias):
+async def collect_news_titles(url_list, qtd_noticias):
     tasks = []
     async with aiohttp.ClientSession() as session:
-        for page_num in range(0, qtd_noticias, 20):  # Supondo 20 notícias por página
-            page_url = URL_SITE.format(page_num)
+        for page_url in url_list:
             task = fetch_news_titles(session, page_url, qtd_noticias)
             tasks.append(task)
-        
+
         # Reúne os resultados de todas as tarefas de forma concorrente
         results = await asyncio.gather(*tasks)
         return [item for sublist in results for item in sublist]
 
 # Função para obter os títulos das notícias
 def get_titles(qtd_noticias: int):
+    url_list = []
+    num_pages = (qtd_noticias + 19) // 20  # Arredonda para cima
+    for number in range(num_pages):
+        url_list.append(f'{URL_SITE}{number * 20}')
+
     # Executa a função assíncrona para coletar os títulos das notícias
-    news_items = asyncio.run(collect_news_titles(qtd_noticias))
+    news_items = asyncio.run(collect_news_titles(url_list, qtd_noticias))
+
     values = []
     for idx, item in enumerate(news_items, start=1):
         values.append(f"{idx}. Título: {item['title']}, URL: {item['url']}")
     return values
+
