@@ -4,6 +4,8 @@ import threading
 import math
 import multiprocessing
 import time
+import json
+import random
 from disc import Cache
 from requests import get_titles
 
@@ -26,13 +28,13 @@ TIME_SINCRONIZED = 3
 NUMBER_CACHE = 5
 
 class Client:
-    def __init__(self, host, port):
+    def __init__(self, host,port):
         self.host = host
         self.port = port
-        self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket_client.connect((self.host, self.port))
+        self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.cache = Cache()
         self.tempo = 0
+        self.BUFFER = 1024
 
     def send_request(self, operation, *args):
         data = [operation, *args]
@@ -41,25 +43,32 @@ class Client:
         start_time = time.time()
 
         result = self.cache.get(data_str)
-        if result != None:
+        if result is not None:
             return result
         else:
-            self.socket_client.send(data_str.encode())
-            result = self.socket_client.recv(4096).decode()
+            ips = self.resolve_operation_server_ips(operation)
+            if ips:
+                serverH ,serverP = random.choice(ips)
+                socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                socket_server.connect((serverH, serverP))
+                socket_server.send(data_str.encode())
+                result = socket_server.recv(4096).decode()
+                if result == 'Operação inexistente!':  # Verifique se a operação não é reconhecida
+                    return 0.0
+            else:
+                return 0.0  # Se não há servidores disponíveis, retorna 0.0
+
             self.cache.set(data_str, result)
-            # Verifique se o tempo de atualização do cache foi atingido
             if self.check_time(time.time() - start_time):
                 self.cache.export_cache()
 
-        return result
+        return float(result)  # Converte o resultado para float
 
-    def check_time(self, time_elapsed) -> bool:
-        if self.tempo >= CACHE_SYNC_TIME:
-            self.tempo = 0
-            return True
-        else:
-            self.tempo += time_elapsed
-            return False
+    def resolve_operation_server_ips(self, operation):
+        self.socket_client.sendto(operation.encode(), (self.host, self.port))
+        ips = self.socket_client.recv(self.BUFFER)
+        ips = json.loads(ips.decode())['resp']
+        return ips
 
     def sumC(self, number1: float, number2: float) -> float:
         return float(self.send_request(SUM, number1, number2))
@@ -91,7 +100,7 @@ class Client:
         result = self.send_request(FIND_PRIMES, start, end)
         return result
 
-    def last_news_if_barbacena(self, qtd_noticias: int) -> []:
+    def last_news_if_barbacena(self, qtd_noticias: int):
         data_str = f"{LAST_NEWS_IF_BARBACENA},{qtd_noticias}"
         news_items = self.cache.get(data_str)
 
@@ -222,3 +231,43 @@ class Server:
             socket_client.send(str(result).encode())
 
         socket_client.close()
+
+class Serve_Names:
+
+    def __init__(self, host: str, port: int):
+        self.host = host
+        self.port = port
+        self.server_names_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.server_names_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Correção aqui
+        self.BUFFER = 1024
+        self.sockets = {
+            'soma': [('127.0.0.1', 6001)],
+            'subtracao': [('127.0.0.1', 6001)],
+            'multiplicacao': [('127.0.0.1', 6001)],
+            'divisao': [('127.0.0.1', 6001)],
+            'is_prime': [('127.0.0.1', 6002)],
+        }
+
+    def createThread(self):
+        self.server_names_socket.bind((self.host, self.port))
+
+        while True:
+            operation, client_address = self.server_names_socket.recvfrom(self.BUFFER)  # Correção aqui
+
+            print('Conexão de:', client_address, operation)
+
+            datas = operation.decode()
+            thread = threading.Thread(target=self.handle_client, args=(datas, client_address))  # Correção aqui
+            thread.start()
+
+    def verificad_operation(self, operation: str):
+        if operation in self.sockets:
+            return self.sockets[operation]
+
+    def handle_client(self, data, client_address):  # Correção aqui
+        response = self.verificad_operation(data)
+        self.server_names_socket.sendto(json.dumps({'resp': response}).encode(), client_address)  # Correção aqui
+
+
+
+            

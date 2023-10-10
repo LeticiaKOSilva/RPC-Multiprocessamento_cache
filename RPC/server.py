@@ -1,4 +1,4 @@
 from rpc import Server
 
-server = Server('', 14001)
+server = Server('', 6001)
 server.createThread()
