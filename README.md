@@ -3,12 +3,14 @@
 
 - O programa foi feito utilizando a linguagem Python;
 - As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
-- Foram criadas 2 classes sendo:
+- Foram criadas 3 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
-   - Uma classe Servder que fornece métodos para manipular os dados vindos do cliente, processá-las e devolve-las ao cliente;
-- Os arquivos client.py e server.py só instanciam,inicializam suas classes e chamam os métodos;
+   - Uma classe serverNames que possuí o ip e a porta dos servidores que realizam cada uma das operações propostas no RPC, retornado uma lista com todos os ips/portas que realizam tal operação;
+   - Uma classe Server que fornece métodos para manipular os dados vindos do cliente, processá-las e devolve-las ao cliente;
+- Os arquivos client.py, server.py e serverName só instanciam,inicializam suas classes e chamam os métodos;
 - Os arquivos acima se conectam a esse arquivo rpc.py pela importação:
     - client.py: import rpc from Client;
+    - serverName: import rpc from ServerNames;
     - server.py: import rpc from Server;
 - O código possui multiprocessos, o servidor pode atender a mais de um cliente por criar uma thread para cada um desses clientes;
 - O cache é um dicionário que é criado logo no construtor do lado do cliente onde primeiro se verifica se o método existe no cache se não existir ele o salva se existir ele o chama;
