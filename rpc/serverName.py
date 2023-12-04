@@ -3,6 +3,7 @@ import os
 import time
 import json
 import threading  # Correção: importando a biblioteca correta
+from rpc.constantes import Constantes
 
 class server_name:
 
@@ -45,7 +46,7 @@ class server_name:
         '''
         if not os.path.exists(log):
             with open(log, "w") as log_fileName:
-                log_fileName.write(" Timestamp - IP do Cliente - Nome da Operação - Tempo de Resposta \n")
+                log_fileName.write(" Timestamp - IP do Cliente - Nome da Operacao - Tempo de Resposta \n")
             
             #Abre o arquivo para anexação
         log_fileName = open(log, "a")
@@ -76,6 +77,13 @@ class server_name:
         timestampI = time.strftime("%Y-%m-%d %H:%M:%S")
 
         response = self.verificad_operation(data)
+
+        if data == Constantes.VALIDATE_CPF:
+            time.sleep(4)
+        elif data == Constantes.IS_PRIME:
+            time.sleep(5)
+        else:
+            time.sleep(6)
 
         #Adiciona a contagem de timestamp
         timestampF = time.strftime("%Y-%m-%d %H:%M:%S")

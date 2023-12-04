@@ -50,7 +50,7 @@ class Client:
                         print("Inexistente" + str(result))
                         return 0.0
                 except ConnectionResetError:
-                    print("A conexão foi redefinida pelo host remoto. Reconectando...")
+                    print("A conexão foi interrompida!")
                     # Adicione lógica de reconexão aqui se necessário
 
                 socket_server.close()

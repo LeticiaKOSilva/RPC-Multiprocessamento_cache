@@ -19,6 +19,12 @@ class Constantes:
     LAST_NEWS_IF_BARBACENA = "last_news_if_barbacena"
     VALIDATE_CPF = "valida_CPF"
 
+    #Referente aos símbolos das operações matemáticas
+    SIM_SUM = "+"
+    SIM_SUB ="-"
+    SIM_MUL = "*"
+    SIM_DIV = "/"
+
     #Referente ao tempo de sincronização
     TIME_SINCRONIZED = 4
 
