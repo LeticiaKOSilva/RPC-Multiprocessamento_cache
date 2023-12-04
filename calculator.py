@@ -2,8 +2,10 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 
 class Calculator:
-    def __init__(self, master):
+    def __init__(self, master, callback):
         self.master = master
+        self.callback = callback
+
         self.master.title("Calculadora")
 
         self.operation = ""
@@ -57,15 +59,18 @@ class Calculator:
 
                 self.operation = operation
                 self.values = values
-                self.return_values(operation,values)
+
+                self.callback(self.operation, self.values)
             except Exception as e:
                 messagebox.showerror("Erro", "Erro ao calcular a expressão.")
         else:
             self.entry.insert(tk.END, value)
 
-    def return_values(self, operation, values):
-        print("Operação:", operation)
-        print("Valores:", values)
+    def return_values(self):
+        print("Operação:", self.operation)
+        print("Valores:", self.values)
+        return self.operation, self.values
+
 
 class TextRedirector:
     def __init__(self, widget, tag="stdout"):

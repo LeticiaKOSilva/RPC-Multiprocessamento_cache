@@ -28,7 +28,7 @@ class server_name:
             'multiplicacao': [('127.0.0.1', 6001)],
             'divisao': [('127.0.0.1', 6001)],
             'last_news_if_barbacena': [('127.0.0.1', 6001)],
-            'is_prime': [('127.0.0.1', 6002)],
+            'is_prime': [('127.0.0.1', 6001)],
             'valida_CPF': [('127.0.0.1', 6001)],
         }
 

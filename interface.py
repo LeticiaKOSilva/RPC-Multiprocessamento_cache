@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 import sys
 from calculator import Calculator, TextRedirector
+import time
 
 class Interface_RPC:
     def __init__(self, master):
@@ -40,37 +41,47 @@ class Interface_RPC:
         y = (screen_height - height) // 2
         self.master.geometry(f"{width}x{height}+{x}+{y}")
 
+    # def show_calculator(self):
+    #     calculator_window = tk.Toplevel(self.master)
+    #     calculator_window.title("Calculadora")
+
+    #     # Substituir sys.stdout por um widget Text
+    #     #output_text = tk.Text(calculator_window, wrap="none")
+    #     #output_text.grid(row=0, column=0, padx=10, pady=10)
+    #     #sys.stdout = TextRedirector(output_text, "stdout")
+    #     calculator_app = Calculator(calculator_window, self.return_values)
+    #     self.operation, self.values = calculator_app.return_values()
+    #     return self.return_values()
+
     def show_calculator(self):
         calculator_window = tk.Toplevel(self.master)
         calculator_window.title("Calculadora")
 
-        # Substituir sys.stdout por um widget Text
-        #output_text = tk.Text(calculator_window, wrap="none")
-        #output_text.grid(row=0, column=0, padx=10, pady=10)
-        #sys.stdout = TextRedirector(output_text, "stdout")
-        calculator_app = Calculator(calculator_window)
+        calculator_app = Calculator(calculator_window, self.on_calculator_close)
+
+    def on_calculator_close(self, operation, values):
+        self.operation = operation
+        self.values = values
+        print("Received values from calculator:", self.operation, self.values)
 
 
-    def button_click(self, value):
-        current_text = self.entry.get()
+    # def button_click(self, value):
+    #     current_text = self.entry.get()
 
-        if value == 'C':
-            self.entry.delete(0, tk.END)
-        elif value == '=':
-            try:
-                operation, *values = current_text.split()
-                values = list(map(float, values))
-                self.operation = operation
-                self.values = values
-                self.return_values()
-            except Exception as e:
-                messagebox.showerror("Erro", "Erro ao calcular a expressão.")
-        else:
-            self.entry.insert(tk.END, value)
+    #     if value == 'C':
+    #         self.entry.delete(0, tk.END)
+    #     elif value == '=':
+    #         try:
+    #             operation, *values = current_text.split()
+    #             values = list(map(float, values))
+    #             self.operation = operation
+    #             self.values = values
+    #             self.return_values()
+    #         except Exception as e:
+    #             messagebox.showerror("Erro", "Erro ao calcular a expressão.")
+    #     else:
+    #         self.entry.insert(tk.END, value)
 
-    def return_values(self):
-        print("Operação:", self.operation)
-        print("Valores:", self.values)
 
     def show_prime_input(self):
         input_value = simpledialog.askstring("Número Primo", "Digite o número:")
@@ -78,7 +89,7 @@ class Interface_RPC:
             number = int(input_value)
             self.operation = "is_prime"
             self.values = [number]
-            self.return_values()
+            return self.return_values()
         except ValueError:
             messagebox.showerror("Erro", "Digite um número válido e inteiro.")
 
@@ -87,7 +98,7 @@ class Interface_RPC:
         if len(input_value) == 11:
             self.operation = "valida_CPF"
             self.values = [input_value]
-            self.return_values()
+            return self.return_values()
         else:
             messagebox.showerror("Erro", "Forneça um CPF(somente número)")
 
@@ -98,9 +109,25 @@ class Interface_RPC:
             if number > 0:
                 self.operation = "last_news_if_barbacena"
                 self.values = [int(input_value)]
-                self.return_values()
+                return self.return_values()
             else:
                 messagebox.showerror("Erro", "Digite um número maior que 0.")
         except ValueError:
             messagebox.showerror("Erro", "Digite um número válido e inteiro.")
+    
+
+    def return_values(self):
+        print("Operação:", self.operation)
+        print("Valores:", self.values)
+        return self.operation, self.values
+    
+    def print_result(self, result):
+        messagebox.showinfo("Resultado Operações:", "A operação: " + str(self.values[0]) + " " + str(self.operation) + " "+ str(self.values[1])+ " é igual a= " + str(result))
+    
+    def print_validate_CPF(self, result):
+        messagebox.showinfo("Resultado CPF", "O cpf: " + str(self.values[0]) + " é válido= " + str(result))
+
+    def print_prime(self, result):
+        messagebox.showinfo("Resultado número primo", "O número: " + str(self.values[0]) + " é primo? " + str(result))
+
     
