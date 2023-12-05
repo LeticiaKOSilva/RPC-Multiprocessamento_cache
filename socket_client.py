@@ -31,10 +31,11 @@ elif operation == Constantes.VALIDATE_CPF:
     interface_RPC.print_validate_CPF(result)
 elif operation == Constantes.LAST_NEWS_IF_BARBACENA:
     news_items = client.last_news_if_barbacena(values[0])
-    for valor in news_items:
-        value = valor.split(',')
-        if int(value[1]) == 5:
-            result += valor
+    # for valor in news_items:
+    #     value = valor.split(',')
+    #     if int(value[1]) == 5:
+    #         result += valor
+    interface_RPC.print_noticias(news_items)
 else:
     if len(values) >= 2:  # Check if there are at least two values in the list
         if operation == Constantes.SIM_SUM:

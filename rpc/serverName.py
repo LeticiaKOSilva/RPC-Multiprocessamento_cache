@@ -4,6 +4,7 @@ import time
 import json
 import threading  # Correção: importando a biblioteca correta
 from rpc.constantes import Constantes
+from rpc.cryptograph import CryptoHandler
 
 class server_name:
 
@@ -61,9 +62,10 @@ class server_name:
         self.server_names_socket.bind((self.host, self.port))
         while True:
             operation, client_address = self.server_names_socket.recvfrom(self.BUFFER)
+            operation = CryptoHandler.decrypt_message(operation.decode('utf-8'),Constantes.KEY)
             print('Conexão de:', client_address, operation)
 
-            datas = operation.decode()
+            datas = operation
             thread = threading.Thread(target=self.handle_client, args=(datas, client_address))
             thread.start()
 
@@ -82,6 +84,8 @@ class server_name:
             time.sleep(4)
         elif data == Constantes.IS_PRIME:
             time.sleep(5)
+        elif data == Constantes.LAST_NEWS_IF_BARBACENA:
+            time.sleep(8)
         else:
             time.sleep(6)
 
@@ -101,7 +105,8 @@ class server_name:
         self.log_file.flush()
         self.to_close_log(self.log_file)
 
-        self.server_names_socket.sendto(json.dumps({'resp': response}).encode(), client_address)
+        message = CryptoHandler.encrypt_message(json.dumps({'resp': response}),Constantes.KEY)
+        self.server_names_socket.sendto(message.encode('utf-8'), client_address)
 
 # Exemplo de uso:
 # server = server_name('127.0.0.1', 6000)

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import messagebox, simpledialog, scrolledtext
 import sys
 from calculator import Calculator, TextRedirector
 import time
@@ -85,35 +85,40 @@ class Interface_RPC:
 
     def show_prime_input(self):
         input_value = simpledialog.askstring("Número Primo", "Digite o número:")
-        try:
-            number = int(input_value)
-            self.operation = "is_prime"
-            self.values = [number]
-            return self.return_values()
-        except ValueError:
-            messagebox.showerror("Erro", "Digite um número válido e inteiro.")
+        if input_value is not None:
+            try:
+                number = int(input_value)
+                self.operation = "is_prime"
+                self.values = [number]
+                return self.return_values()
+            except ValueError:
+                messagebox.showerror("Erro", "Digite um número válido e inteiro.")
 
     def show_cpf_input(self):
         input_value = simpledialog.askstring("Validar CPF", "Digite o CPF:")
-        if len(input_value) == 11:
-            self.operation = "valida_CPF"
-            self.values = [input_value]
-            return self.return_values()
-        else:
-            messagebox.showerror("Erro", "Forneça um CPF(somente número)")
+
+        if input_value is not None:
+            if len(input_value) == 11:
+                self.operation = "valida_CPF"
+                self.values = [input_value]
+                return self.return_values()
+            else:
+                messagebox.showerror("Erro", "Forneça um CPF(somente número)")
 
     def show_news_input(self):
         input_value = simpledialog.askstring("Notícias Ifet", "Digite o número de notícias:")
-        try:
-            number = int(input_value)
-            if number > 0:
-                self.operation = "last_news_if_barbacena"
-                self.values = [int(input_value)]
-                return self.return_values()
-            else:
-                messagebox.showerror("Erro", "Digite um número maior que 0.")
-        except ValueError:
-            messagebox.showerror("Erro", "Digite um número válido e inteiro.")
+        
+        if input_value is not None:
+            try:
+                number = int(input_value)
+                if number > 0:
+                    self.operation = "last_news_if_barbacena"
+                    self.values = [int(input_value)]
+                    return self.return_values()
+                else:
+                    messagebox.showerror("Erro", "Digite um número maior que 0.")
+            except ValueError:
+                messagebox.showerror("Erro", "Digite um número válido e inteiro.")
     
 
     def return_values(self):
@@ -130,4 +135,16 @@ class Interface_RPC:
     def print_prime(self, result):
         messagebox.showinfo("Resultado número primo", "O número: " + str(self.values[0]) + " é primo? " + str(result))
 
-    
+    def print_noticias(self, result):
+    #     messagebox.showinfo("Resultado Notícias Ifet:", "Número de notícias pesquisadas: " + str(self.values[0]) + "\nResultado:\n" + str(result))
+        self.master = tk.Tk()
+        self.master.title("Resultado Notícias Ifet")
+
+        # Adiciona uma área de texto com barra de rolagem
+        text_area = scrolledtext.ScrolledText(self.master, wrap=tk.WORD, width=150, height=40)
+        text_area.pack(expand=True, fill="both")
+
+        # Adiciona o resultado à área de texto
+        text_area.insert(tk.END, "Número de notícias pesquisadas: " + str(self.values[0]) + "\nResultado:\n" + str(result))
+
+        self.master.mainloop()

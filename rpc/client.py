@@ -17,7 +17,7 @@ class Client:
         self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.cache = Cache()
         self.tempo = 0
-        self.BUFFER = 1024
+        self.BUFFER = 8192
 
     def send_request(self, operation, *args):
         data = [operation, *args]
@@ -72,9 +72,12 @@ class Client:
         return False 
 
     def resolve_operation_server_ips(self, operation):
-        self.socket_client.sendto(operation.encode(), (self.host, self.port))
-        ips = self.socket_client.recv(self.BUFFER)
-        ips = json.loads(ips.decode())['resp']
+        message = CryptoHandler.encrypt_message(operation,Constantes.KEY)
+        self.socket_client.sendto(message.encode('utf-8'), (self.host, self.port))
+        ips = self.socket_client.recvfrom(self.BUFFER)
+        ips_data = ips[0]
+        ips = CryptoHandler.decrypt_message(ips_data.decode('utf-8'), Constantes.KEY)
+        ips = json.loads(ips)['resp']
         return ips
 
     def sumC(self, number1: float, number2: float) -> float:
@@ -109,24 +112,33 @@ class Client:
 
     def last_news_if_barbacena(self, qtd_noticias: int):
         data_str = f"{Constantes.LAST_NEWS_IF_BARBACENA},{qtd_noticias}"
-        news_items = self.cache.get(data_str)
+        news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
 
-        if self.cache.is_cache_outdated(data_str):
-            # Se a quantidade desejada é maior que a do cache, buscar no site
+        if news_items == Constantes.NO_NOTICIAS:
+            news_items = "Número inválido de notícias"
+        else:
             news_items = Request.get_titles(qtd_noticias)
             self.cache.set(data_str, news_items)  # Atualiza o cache
-        elif news_items is not None:
-            news_items = self.cache.get_v(data_str,qtd_noticias)
-            if len(news_items) > 0 :
-                self.cache.set(data_str, news_items)  # Atualiza o cache
-            else:
-                # Se a quantidade desejada é maior que a do cache, buscar no site
-                news_items = Request.get_titles(qtd_noticias)
-                self.cache.set(data_str, news_items)  # Atualiza o cache
-        else:
-            # Se a quantidade desejada é maior que a do cache, buscar no site
-                news_items = Request.get_titles(qtd_noticias)
-                self.cache.set(data_str, news_items)  # Atualiza o cache
+        #news_items = self.cache.get(data_str)
+
+        # if self.cache.is_cache_outdated(data_str):
+        #     # Se a quantidade desejada é maior que a do cache, buscar no site
+        #     #news_items = Request.get_titles(qtd_noticias)
+        #     news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
+        #     self.cache.set(data_str, news_items)  # Atualiza o cache
+        # elif news_items is not None:
+        #     news_items = self.cache.get_v(data_str,qtd_noticias)
+        #     if len(news_items) > 0 :
+        #     else:
+        #         # Se a quantidade desejada é maior que a do cache, buscar no site
+        #         #news_items = Request.get_titles(qtd_noticias)
+        #         news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
+        #         self.cache.set(data_str, news_items)  # Atualiza o cache
+        # else:
+        #     # Se a quantidade desejada é maior que a do cache, buscar no site
+        #         #news_items = Request.get_titles(qtd_noticias)
+        #         news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
+        #         self.cache.set(data_str, news_items)  # Atualiza o cache
         return news_items
     
     def valida_CPF(self,cpf:str) -> bool:

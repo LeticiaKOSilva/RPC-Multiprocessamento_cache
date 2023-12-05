@@ -19,6 +19,9 @@ class Constantes:
     LAST_NEWS_IF_BARBACENA = "last_news_if_barbacena"
     VALIDATE_CPF = "valida_CPF"
 
+    YES_NOTICIAS ="Pode procurar"
+    NO_NOTICIAS = "Nao pode procurar"
+    
     #Referente aos símbolos das operações matemáticas
     SIM_SUM = "+"
     SIM_SUB ="-"

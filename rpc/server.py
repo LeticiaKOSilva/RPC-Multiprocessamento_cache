@@ -6,6 +6,7 @@ import multiprocessing
 import time
 from validate_docbr import CPF #Biblioteca que valida CPFS desconsidernando a presença de "." e "-"
 from rpc.cryptograph import CryptoHandler
+from rpc.request import Request
 
 class Server:
     def __init__(self, host: str, port: int):
@@ -17,9 +18,13 @@ class Server:
 
     def createThread(self):
         while True:
-            client, addr = self.socket_server.accept()
-            client_thread = threading.Thread(target=self.handle_client, args=(client,))
-            client_thread.start()
+            try:
+                client, addr = self.socket_server.accept()
+                client_thread = threading.Thread(target=self.handle_client, args=(client,))
+                client_thread.start()
+            except KeyboardInterrupt:
+                print("Servidor interrompido pelo usuário.")
+                self.is_running = False  # Altera a flag para encerrar o loop
 
     def is_prime(self, number: int) -> bool:
 
@@ -58,6 +63,12 @@ class Server:
         result_str = ",".join([str (float(result)) for result in results])
         return result_str
 
+    def last_news_if_barbacena(self, qtd_noticias):
+        if qtd_noticias > 0 :
+            return Constantes.YES_NOTICIAS
+        
+        return Constantes.NO_NOTICIAS
+
     def find_primes(self, start, end):
         primes = []
 
@@ -91,7 +102,7 @@ class Server:
     def handle_client(self, socket_client):
         while True:
             try:
-                data = socket_client.recv(4096).decode('utf-8')
+                data = socket_client.recv(8192).decode('utf-8')
                 data = CryptoHandler.decrypt_message(data,Constantes.KEY)
                 
                 if not data:
@@ -136,9 +147,12 @@ class Server:
                     cpf = args[0]
                     print('CPF: ' + cpf)
                     result = self.valida_CPF(cpf)
+                elif operation == Constantes.LAST_NEWS_IF_BARBACENA:
+                    result = self.last_news_if_barbacena(int(args[0]))
                 else:
                     result = 0.0
                 print('chegou aqui')
+                print(result)
                 message = CryptoHandler.encrypt_message(str(result),Constantes.KEY)
                 socket_client.send(message.encode('utf-8'))
             except ConnectionResetError:
