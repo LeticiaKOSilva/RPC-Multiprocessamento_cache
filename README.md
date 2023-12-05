@@ -9,10 +9,22 @@
     || socket | | Criação e comunicação entre meus sockets: cliente, servidor de nome e servidor. ||
     || threading | | Para a criação de threads caso haja mais de um cliente acessando ao mesmo tempo. ||
     || multiprocessing | | Para aumentar a rapides do processo. ||
-    || tkinter | messagebox, simpledialog, scrolledtext | Métodos utilizados para auxiliar na criação da interface gráfica ||
-    || sys | | Operações com o sistema operacional ||
-    || asyncio | | Para a busca de notícias do ifet ocorrer de forma assíncrona ||
-    || aiohttp | | Para junto a biblioteca asyncio fazer a busca do título e link das notícias ||
+    || tkinter | messagebox, simpledialog, scrolledtext | Métodos utilizados para auxiliar na criação da interface gráfica. ||
+    || sys | | Operações com o sistema operacional. ||
+    || asyncio | | Para a busca de notícias do ifet ocorrer de forma assíncrona. ||
+    || aiohttp | | Para junto a biblioteca asyncio fazer a busca do título e link das notícias. ||
+    || bs4 | BeautifulSoup | Método que auxlia na manipulação de texto de marcação do html. ||
+    || time | | Manipulação do tempo no arquivo de log. ||
+    || validate_docbr | CPF | Utilizado para a validação de cpfs. ||
+    || json | | Manipulação de json. ||
+    || datetime | datetime, timedelta | Manipulação de data e hora para o cache ||
+    || Crypto.Cipher | AES | Padrão de criptografia simétrica amplamente utilizada. ||
+    || Crypto.Util.Padding | pad, unpad | Utilização dos métodos para adicionar ou remover preenchimento em dados antes de criptografá-los ou após descriptografá-los. ||
+    || base64 | | Usada para codificar e decodificar dados em formato base64. ||
+  
+  
+  
+  
   
   
   
