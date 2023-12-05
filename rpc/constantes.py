@@ -37,7 +37,3 @@ class Constantes:
     KEY = b'Sixteen byte key'
 
     URL_SITE = "https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int="
-
-#Exemplos de CPF
-#030.530.356-26
-#137.819.696-14

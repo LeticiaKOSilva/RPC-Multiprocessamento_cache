@@ -24,7 +24,7 @@ class server_name:
 
     def server_sockets(self):
         sockets = {
-            'soma': [('127.0.0.1', 6001)],
+            'soma': [('', 6001)],
             'subtracao': [('127.0.0.1', 6001)],
             'multiplicacao': [('127.0.0.1', 6001)],
             'divisao': [('127.0.0.1', 6001)],
@@ -79,15 +79,6 @@ class server_name:
         timestampI = time.strftime("%Y-%m-%d %H:%M:%S")
 
         response = self.verificad_operation(data)
-
-        if data == Constantes.VALIDATE_CPF:
-            time.sleep(4)
-        elif data == Constantes.IS_PRIME:
-            time.sleep(5)
-        elif data == Constantes.LAST_NEWS_IF_BARBACENA:
-            time.sleep(8)
-        else:
-            time.sleep(6)
 
         #Adiciona a contagem de timestamp
         timestampF = time.strftime("%Y-%m-%d %H:%M:%S")
