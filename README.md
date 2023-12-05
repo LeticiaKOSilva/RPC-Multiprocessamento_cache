@@ -10,7 +10,6 @@
     || threading | | Para a criação de threads caso haja mais de um cliente acessando ao mesmo tempo. ||
     || multiprocessing | | Para aumentar a rapides do processo. ||
   
-- As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
 - Foram criadas 3 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
    - Uma classe serverNames que possuí o ip e a porta dos servidores que realizam cada uma das operações propostas no RPC, retornado uma lista com todos os ips/portas que realizam tal operação;
