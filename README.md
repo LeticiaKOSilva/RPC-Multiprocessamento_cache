@@ -1,11 +1,23 @@
 # Multiprocessamento & cache
 ### ->Realizando operações e verificando através da medida de tempo se o multiprocessamento é mais rápido ou não, além da utilização de um cache para facilitar a rapidez do acesso a um método já chamado anteriormente.
 
+## Proposta de atividade
+  - Atividade proposta na matéria de Sistemas Distribuídos lecionada pelo professor Rafael.
+  - A idéia é durante as semanas realizar novas entregas de novas funcionalidades do RPC(Remote Procedure Call) que é a comunicação que permite que um programa em um computador solicite a execução de um procedimento (função, método) em um espaço de endereço diferente, geralmente em outro processo ou em um sistema distribuído. 
+  - Na tabela a seguir temos a definiçaõ das tarefas entregadas a cada semana.
+  - 
+    | | SEMANA | FUNCIONALIDADES | |
+    | --- | --- | --- | --- |
+    || Semana 1 | Criação dos sockets do cliente e servidor; <br> Elaboração dos métodos soma, subtração, divisão e multiplicação do lado do cliente e do servidor.||
+    
+    
 - O programa foi feito utilizando a linguagem Python;
-- Foram utiliadas diversas biliotecas:
-  
+## Bibliotecas utilizadas na elaboração dessa atividade
+
+- A seguir apresentamos tabela com as bibliotecas.
+
     | | BIBLIOTECA | MÉTODO ESPECÍFICO | DESCRIÇÃO DE USO | |
-   | --- | --- | --- | --- | --- |
+    | --- | --- | --- | --- | --- |
     || socket | | Criação e comunicação entre meus sockets: cliente, servidor de nome e servidor. ||
     || threading | | Para a criação de threads caso haja mais de um cliente acessando ao mesmo tempo. ||
     || multiprocessing | | Para aumentar a rapides do processo. ||
@@ -28,15 +40,8 @@
   
   
   
-- Foram criadas 3 classes sendo:
-   - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
-   - Uma classe serverNames que possuí o ip e a porta dos servidores que realizam cada uma das operações propostas no RPC, retornado uma lista com todos os ips/portas que realizam tal operação;
-   - Uma classe Server que fornece métodos para manipular os dados vindos do cliente, processá-las e devolve-las ao cliente;
-- Os arquivos client.py, server.py e serverName só instanciam,inicializam suas classes e chamam os métodos;
-- Os arquivos acima se conectam a esse arquivo rpc.py pela importação:
-    - client.py: import rpc from Client;
-    - serverName: import rpc from ServerNames;
-    - server.py: import rpc from Server;
+
+
 - O código possui multiprocessos, o servidor pode atender a mais de um cliente por criar uma thread para cada um desses clientes;
 - O cache é um dicionário que é criado logo no construtor do lado do cliente onde primeiro se verifica se o método existe no cache se não existir ele o salva se existir ele o chama;
 - Pra verificar a eficiência do multiprocessamento é feito uma verificação numa lista de números que verifica se um valor é primo ou não e retorna uma lista de booleanos, essa verificação e feita com e sem multiprocessamento e através da biblioteca time conseguimos calcular o tempo de execução de ambas as formas.
