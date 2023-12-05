@@ -4,8 +4,11 @@
 - O programa foi feito utilizando a linguagem Python;
 - Foram utiliadas diversas biliotecas:
   
-      | | NOME | LINK | USABILIDADE | |
-      | --- | --- | --- | --- | --- |
+    | | BIBLIOTECA | MÉTODO ESPECÍFICO | DESCRIÇÃO DE USO | |
+   | --- | --- | --- | --- | --- |
+    || socket | | Criação e comunicação entre meus sockets: cliente, servidor de nome e servidor. ||
+    || threading | | Para a criação de threads caso haja mais de um cliente acessando ao mesmo tempo. ||
+    || multiprocessing | | Para aumentar a rapides do processo. ||
   
 - As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
 - Foram criadas 3 classes sendo:
