@@ -8,7 +8,16 @@
     
     | | SEMANA | FUNCIONALIDADES | |
     | --- | --- | --- | --- |
-    || Semana 1 | Criação dos sockets do cliente e servidor; <br> Elaboração dos métodos soma, subtração, divisão e multiplicação do lado do cliente e do servidor.||
+    || Semana 1 | - Criação dos sockets do cliente e servidor em TCP ; <br> - Elaboração dos métodos soma, subtração, divisão e multiplicação do lado do cliente e do servidor.||
+    || Semana 2 | - Adicionar a operação <strong>is_prime(number: int) -> bool no RPC</strong> ;<br> - Faça um método <strong> is_primes(numbres:list) -> list </strong>com a utilização de multiprocessos;<br> - Exibir números primos de 10 a 10000;<br> - Utilizar a biblioteca time para contabilizar o tempo entre a procura de números primos com e sem a utilização da biblioteca multiprocessing. ||
+    || Semana 3 | Implementação de um cache em memória no cliente para todas as operações do RPC. ||
+    || Semana 4 | - Aprimoramento do cache, agora ele deve ser persistido em disco;<br> - Criação de uma constante que verifica um tempo mínimo para a sincronização;<br> - Constante com o número máximo de registros do cache em disco;<br> - Quando o número de registros for ultrapassado substituir o registro mais velho pelo novo.||
+    || Semana 5 | - Adicionar a operação <strong> last_news_if_barbacena(qtd_noticias : int) -> []</strong>;<br> - A operação receberá como parâmetro o número de notícias que deseja pesquisar e deve retornar um lista com o título e link das notícias;<br> - A operação utiliza o cache criado na semana 4; <br> - As notícias devem ser coletadas com paralelismo;<br> - link do site das notícias: (https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}) ||
+    || Semana 6 | - O cache deve considerar que quando o método <strong>last_news_if_barbacena</strong> for chamado que haja a verificação no cache, onde se houver respostas com número de notícias menores qou iguais que elas sejam aproveitadas;<br> - O cache deve ser consistente com as atualizações do site do ifet que deve realizar a sincronização de 5 em 5 minutos. ||
+    || Semana 7 | - Elaboração de um servidor de nomes que irá estabelecer/gerenciar a conexão entre o cliente e o servidor; <br> - O cliente RPC agora será instanciado recebendo a porta desse servidor de nomes; <br> - A conexão entre cliente e servidor de nomes será UDP onde o cliente passara a operação que deseja solicitar ao servidor;<br> - O servidor de nomes deve retornar uma lista com o ip dos servidores que implementam a operação solicitada pelo cliente;<br> - O cliente irá escolher um desses servidores de forma aleatória. ||
+    || Semana 8, 9 e 10 | - Criação do método <strong> valida_CPF(str:cpf) -> bool</strong>;<br> - Sistema de log onde um único arquivo texto (por servidor) deve armazenar para cada requisição recebida: <strong>timestamp, IP do cliente, nome da operação, tempo de resposta</strong>;<br> - Criação de um arquivo Shell Script que leia esses arquivos log e retorne o(s) ip(s) das requisições feitas;<br> - Criar um notebook no Kaggle ou Google Colab, fazer o upload de um arquivo de log, transformar seus dados em um dataframe Pandas. A partir dele, gerar:<br> a) Um gráfico de pizza com a porcentagem de chamadas por operação.<br> b) Um gráfico de barras (horizontal) com a quantidade de requisições por endereço IP.<br> c)Um gráfico de barras (vertical) com a quantidade de requisições por horário do dia.<br> d) Um gráfico de dispersão onde cada ponto é uma requisição, o eixo x é a operação chamada e o eixo y é o tempo de resposta.<br> - Implementação de criptografia nos envios e recebimentos das chamadas, podendo utiliar criptografia nas mensagens ou sockets seguros (SSL). ||
+    || Semana 11 | - Criação de uma GUI para que o usuário possa interagir com as operações implementadas pelo servidor; <br> - A GUI pode ser desktop ou web, em linguagem/toolkit livre. ||
+    
     
 ## Resultado da atividade
   - O programa foi feito utilizando a linguagem Python;
@@ -44,27 +53,3 @@
     || Crypto.Cipher | AES | Padrão de criptografia simétrica amplamente utilizada. ||
     || Crypto.Util.Padding | pad, unpad | Utilização dos métodos para adicionar ou remover preenchimento em dados antes de criptografá-los ou após descriptografá-los. ||
     || base64 | | Usada para codificar e decodificar dados em formato base64. ||
-  
-  
-  
-  
-  
-  
-  
-
-
-- O código possui multiprocessos, o servidor pode atender a mais de um cliente por criar uma thread para cada um desses clientes;
-- O cache é um dicionário que é criado logo no construtor do lado do cliente onde primeiro se verifica se o método existe no cache se não existir ele o salva se existir ele o chama;
-- Pra verificar a eficiência do multiprocessamento é feito uma verificação numa lista de números que verifica se um valor é primo ou não e retorna uma lista de booleanos, essa verificação e feita com e sem multiprocessamento e através da biblioteca time conseguimos calcular o tempo de execução de ambas as formas.
-- Agora com a ajuda da classe Cache disponível no arquivo disc.py foi feito um cache em disco, onde:
-  - Uma variável verifica o tempo em que o cache em disco será atualizado;
-  - É outra variável que delimita um tamanho de cache, onde quando este limite e ultrapassado o cache mais antigo é excluído.
-- O novo método da classe Client last_news_if_barbacena tem como função retornar ao cliente uma lista com o número de notícias que deseja extrair do site (https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}).
-- O arquivo requests.py tem várias funções que tem como objetivos principais:
-   - Fazer uma requisição uma requisição no site para extrair seu html;
-   - Pegar do código html o título e o link de cada notícia;
-   - Formata-las em título e link;
-   - E retornar em forma de lista.
-- O método def last_news_if_barbacena(self, qtd_noticias: int) -> [], deve além de adicionar ao cache as notícias solicitadas como:
-     - Considerar que toda vez que for solicitado uma nova quantidade de notícias, verificar se no cache já existe uma solicitação igual ou maior a essa. Por isso se existir ele retorna os dados correspondentes ao número solicitado pelo usuário;
-     - De 5 em 5 minutos ele deve ir ao site (https://www.ifsudestemg.edu.br/noticias/barbacena/?b_start:int={}) e atualizar o cache com as novas notícias.
