@@ -3,8 +3,10 @@
 
 - O programa foi feito utilizando a linguagem Python;
 - Foram utiliadas diversas biliotecas:
-      || Bilioteca | Função Expecífica ||
-      |-----|-----|-----|-----|-----|
+  
+      | | NOME | LINK | USABILIDADE | |
+      | --- | --- | --- | --- | --- |
+  
 - As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
 - Foram criadas 3 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
