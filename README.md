@@ -2,6 +2,9 @@
 ### ->Realizando operações e verificando através da medida de tempo se o multiprocessamento é mais rápido ou não, além da utilização de um cache para facilitar a rapidez do acesso a um método já chamado anteriormente.
 
 - O programa foi feito utilizando a linguagem Python;
+- Foram utiliadas diversas biliotecas:
+      || Bilioteca | Função Expecífica ||
+      |-----|-----|-----|-----|-----|
 - As bibliotecas usadas nesse código foram: socket, threading, time, math e multiprocessing, asyncio, aiohttp, bs4, os, pickle;
 - Foram criadas 3 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
