@@ -5,13 +5,24 @@
   - Atividade proposta na matéria de Sistemas Distribuídos lecionada pelo professor Rafael.
   - A idéia é durante as semanas realizar novas entregas de novas funcionalidades do RPC(Remote Procedure Call) que é a comunicação que permite que um programa em um computador solicite a execução de um procedimento (função, método) em um espaço de endereço diferente, geralmente em outro processo ou em um sistema distribuído. 
   - Na tabela a seguir temos a definiçaõ das tarefas entregadas a cada semana.
-  - 
+    
     | | SEMANA | FUNCIONALIDADES | |
     | --- | --- | --- | --- |
     || Semana 1 | Criação dos sockets do cliente e servidor; <br> Elaboração dos métodos soma, subtração, divisão e multiplicação do lado do cliente e do servidor.||
     
+## Resultado da atividade
+  - O programa foi feito utilizando a linguagem Python;
+  - A seguir temos a imagem da primeira interface gráfica que aparece para o cliente:
     
-- O programa foi feito utilizando a linguagem Python;
+    <img src="https://github.com/LeticiaKOSilva/RPC-Multiprocessamento_cache/blob/main/Imagens_rpc/interface_rpc.jpg" width="400px"/>
+    
+- Depois ao escolher uma das opções acima e precionar o seu botão correspondente, neste exemplo escolhemos o botão operações matemáticas.
+
+    <img src="https://github.com/LeticiaKOSilva/RPC-Multiprocessamento_cache/blob/main/Imagens_rpc/calculadora_rpc.jpg" width="300px"/>
+    
+- A escolha da operação matemática foi a subtração, onde fizemos 78 - 58 e agora temos o resultado desta operação.
+    <img src="https://github.com/LeticiaKOSilva/RPC-Multiprocessamento_cache/blob/main/Imagens_rpc/resultado_operacao_rpc.jpg" width="400px"/>
+    
 ## Bibliotecas utilizadas na elaboração dessa atividade
 
 - A seguir apresentamos tabela com as bibliotecas.
