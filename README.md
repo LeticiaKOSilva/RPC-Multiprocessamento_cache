@@ -9,6 +9,7 @@
     || socket | | Criação e comunicação entre meus sockets: cliente, servidor de nome e servidor. ||
     || threading | | Para a criação de threads caso haja mais de um cliente acessando ao mesmo tempo. ||
     || multiprocessing | | Para aumentar a rapides do processo. ||
+    || tkinter | messagebox, simpledialog, scrolledtext | Métodos utilizados para
   
 - Foram criadas 3 classes sendo:
    - Uma classe Client que fornece métodos para a manipualação de dados do cliente e comunicação com o servidor;
