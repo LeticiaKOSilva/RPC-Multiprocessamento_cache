@@ -1,0 +1,3 @@
+Timestamp - IP do Cliente - Nome da Operacao - Tempo de Resposta
+2024-06-20 09:27:49 - ('127.0.0.1', 50876) - is_prime - 2024-06-20 09:27:51
+2024-06-20 09:30:29 - ('127.0.0.1', 50725) - is_prime - 2024-06-20 09:30:31

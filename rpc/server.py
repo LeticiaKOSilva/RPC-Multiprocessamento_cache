@@ -94,7 +94,7 @@ class Server:
         if len(cpf_version_number) == 11:
             cpf_validate = CPF()
             #Verifica se o CPF é válido
-            print(cpf_version_number)
+            #print(cpf_version_number)
             return cpf_validate.validate(cpf_version_number)
         return False
 
@@ -107,7 +107,7 @@ class Server:
                 
                 if not data:
                     break
-                print('pasou')
+                #print('pasou')
                 time.sleep(3)
                 operation, *args = data.split(",")
 
@@ -151,12 +151,11 @@ class Server:
                     result = self.last_news_if_barbacena(int(args[0]))
                 else:
                     result = 0.0
-                print('chegou aqui')
-                print(result)
+                #print('chegou aqui')
+                #print(result)
                 message = CryptoHandler.encrypt_message(str(result),Constantes.KEY)
                 socket_client.send(message.encode('utf-8'))
             except ConnectionResetError:
                 print("Conexão redefinida!")
                 break
-        # Remova a linha abaixo, pois o servidor não será encerrado quando a conexão com o cliente for fechada
         socket_client.close()

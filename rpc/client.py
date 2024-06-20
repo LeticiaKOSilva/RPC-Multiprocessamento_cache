@@ -3,11 +3,13 @@ import json
 import inspect
 import random
 import time
+import sys
 import multiprocessing
 from rpc.cache import Cache
 from rpc.constantes import Constantes
 from rpc.request import Request
 from rpc.cryptograph import CryptoHandler
+
 
 class Client:
 
@@ -29,44 +31,46 @@ class Client:
         if result is not None:
             return result
         else:
-            print('entrou aqui nesse trem muito doido')
+            #print('entrou aqui nesse trem muito doido')
             ips = self.resolve_operation_server_ips(operation)
             if ips:
-                print('entrou no if ips')
+                #print('entrou no if ips')
                 serverH, serverP = random.choice(ips)
                 socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
                 try:
                     socket_server.connect((serverH, serverP))
-                    print('conectou nesse trem')
-                    print(data_str)
+                    #print(data_str)
                     message = CryptoHandler.encrypt_message(data_str,Constantes.KEY)
                     socket_server.send(message.encode('utf-8'))
-                    print('enviou')
                     result = socket_server.recv(4096).decode('utf-8')
-                    print('recebeu o resultado')
                     result = CryptoHandler.decrypt_message(result,Constantes.KEY)
                     if result == 'Operação inexistente!':
                         print("Inexistente" + str(result))
                         return 0.0
                 except ConnectionResetError:
                     print("A conexão foi interrompida!")
-                    # Adicione lógica de reconexão aqui se necessário
-
-                socket_server.close()
+                    sys.exit(1)
+                except ConnectionRefusedError:
+                    print(f"A conexão foi recusada pelo servidor({serverH}:{serverP}) para a operação '{operation}'.")
+                    sys.exit(1)
+                except Exception as e:
+                    print("Erro ao tentar realizar a operação!")
+                    sys.exit(1)
+                finally:
+                    socket_server.close()
 
             else:
+                print(f"Não foi possível encontrar IPs para a operação!")
                 return 0.0
 
             self.cache.set(data_str, result)
             if self.check_time(time.time() - start_time):
-                print("Entrou no time")
+                #print("Entrou no time")
                 self.cache.export_cache()
-        print("Passou do send")
+        self.finalize_processing_call()
         return result
     
     def check_time(self, elapsed_time):
-        
         if elapsed_time >= Constantes.TIME_SINCRONIZED:
             return True
         return False 
@@ -79,6 +83,10 @@ class Client:
         ips = CryptoHandler.decrypt_message(ips_data.decode('utf-8'), Constantes.KEY)
         ips = json.loads(ips)['resp']
         return ips
+
+    def finalize_processing_call(self):
+        message = CryptoHandler.encrypt_message("FINALIZE_PROCESSING", Constantes.KEY)
+        self.socket_client.sendto(message.encode('utf-8'), (self.host, self.port))
 
     def sumC(self, number1: float, number2: float) -> float:
         return float(self.send_request(Constantes.SUM, number1, number2))
@@ -119,26 +127,7 @@ class Client:
         else:
             news_items = Request.get_titles(qtd_noticias)
             self.cache.set(data_str, news_items)  # Atualiza o cache
-        #news_items = self.cache.get(data_str)
 
-        # if self.cache.is_cache_outdated(data_str):
-        #     # Se a quantidade desejada é maior que a do cache, buscar no site
-        #     #news_items = Request.get_titles(qtd_noticias)
-        #     news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
-        #     self.cache.set(data_str, news_items)  # Atualiza o cache
-        # elif news_items is not None:
-        #     news_items = self.cache.get_v(data_str,qtd_noticias)
-        #     if len(news_items) > 0 :
-        #     else:
-        #         # Se a quantidade desejada é maior que a do cache, buscar no site
-        #         #news_items = Request.get_titles(qtd_noticias)
-        #         news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
-        #         self.cache.set(data_str, news_items)  # Atualiza o cache
-        # else:
-        #     # Se a quantidade desejada é maior que a do cache, buscar no site
-        #         #news_items = Request.get_titles(qtd_noticias)
-        #         news_items = self.send_request(Constantes.LAST_NEWS_IF_BARBACENA, qtd_noticias)
-        #         self.cache.set(data_str, news_items)  # Atualiza o cache
         return news_items
     
     def valida_CPF(self,cpf:str) -> bool:

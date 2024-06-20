@@ -1,0 +1,4 @@
+Timestamp - IP do Cliente - Nome da Operacao - Tempo de Resposta
+2024-06-19 22:32:42 - ('127.0.0.1', 50622) - valida_CPF - 2024-06-19 22:32:45
+2024-06-19 22:33:00 - ('127.0.0.1', 50622) - last_news_if_barbacena - 2024-06-19 22:33:03
+2024-06-20 09:34:25 - ('127.0.0.1', 60430) - last_news_if_barbacena - 2024-06-20 09:34:28

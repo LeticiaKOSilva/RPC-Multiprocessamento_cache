@@ -4,6 +4,20 @@ import sys
 from calculator import Calculator, TextRedirector
 import time
 
+'''
+    Interface gráfica principal do programa na parte do cliente.
+    
+    Possui os botões: 
+    -Número primo
+    -Validar CPF
+    - Notícia do Ifet
+    - Operações Matemáticas
+    -Sair
+
+    Por essa interface ser a principal o programa no lado do cliente só acabará 
+    quando o usuário fechar essa inteface. Existem 2 flags de saáda, sendo eles:
+    o botão "Sair" e o "X" posicionado no canto direito da interface.
+'''
 class Interface_RPC:
     def __init__(self, master):
         self.master = master
@@ -26,63 +40,59 @@ class Interface_RPC:
         btn_calc = tk.Button(master, text="Operações Matemáticas", command=self.show_calculator)
         btn_calc.grid(row=4, column=5, padx=10, pady=5)
 
+        btn_exit = tk.Button(master, text="Sair", command=self.exit)
+        btn_exit.grid(row=5, column=5, padx=10, pady=5)
+
+        self.operation_callback = None
         self.operation = ""
         self.values = []
         # Centraliza a janela e atualiza as dimensões
         self.center_window()
         self.master.update_idletasks()
 
+    
+    #Posiciona a janela no centro da tela
     def center_window(self):
+        #Cálculo da largura e altura da janela
         width = 300
         height = 230
+        #Cálculo da largura e altura da tela
         screen_width = self.master.winfo_screenwidth()
         screen_height = self.master.winfo_screenheight()
+        #Cálculo das coordenadas para que a janela fique centralizada
         x = (screen_width - width) // 2
         y = (screen_height - height) // 2
+        #Definição da geometria da janela
         self.master.geometry(f"{width}x{height}+{x}+{y}")
 
-    # def show_calculator(self):
-    #     calculator_window = tk.Toplevel(self.master)
-    #     calculator_window.title("Calculadora")
-
-    #     # Substituir sys.stdout por um widget Text
-    #     #output_text = tk.Text(calculator_window, wrap="none")
-    #     #output_text.grid(row=0, column=0, padx=10, pady=10)
-    #     #sys.stdout = TextRedirector(output_text, "stdout")
-    #     calculator_app = Calculator(calculator_window, self.return_values)
-    #     self.operation, self.values = calculator_app.return_values()
-    #     return self.return_values()
+    ''' 
+        Define um callback, que será acionado somente quando uma operação da interface
+        for precionada pelo usuário, com isso a lógica por traz das operções funciona
+        corretamente sem ser necessário fechar a interface principal.
+    '''
+    def set_operation_callback(self, callback):
+        self.operation_callback = callback
 
     def show_calculator(self):
         calculator_window = tk.Toplevel(self.master)
         calculator_window.title("Calculadora")
-
         calculator_app = Calculator(calculator_window, self.on_calculator_close)
 
     def on_calculator_close(self, operation, values):
         self.operation = operation
         self.values = values
         print("Received values from calculator:", self.operation, self.values)
+        if self.operation_callback:
+            self.operation_callback(self.operation, self.values)
 
-
-    # def button_click(self, value):
-    #     current_text = self.entry.get()
-
-    #     if value == 'C':
-    #         self.entry.delete(0, tk.END)
-    #     elif value == '=':
-    #         try:
-    #             operation, *values = current_text.split()
-    #             values = list(map(float, values))
-    #             self.operation = operation
-    #             self.values = values
-    #             self.return_values()
-    #         except Exception as e:
-    #             messagebox.showerror("Erro", "Erro ao calcular a expressão.")
-    #     else:
-    #         self.entry.insert(tk.END, value)
-
-
+    def exit(self):
+        try:
+            self.master.destroy()
+        except Exception as e:
+            print("Erro ao tentar encerrar a interface!")
+        finally:
+            sys.exit(0)
+        
     def show_prime_input(self):
         input_value = simpledialog.askstring("Número Primo", "Digite o número:")
         if input_value is not None:
@@ -90,7 +100,8 @@ class Interface_RPC:
                 number = int(input_value)
                 self.operation = "is_prime"
                 self.values = [number]
-                return self.return_values()
+                if self.operation_callback:
+                    self.operation_callback(self.operation, self.values)
             except ValueError:
                 messagebox.showerror("Erro", "Digite um número válido e inteiro.")
 
@@ -101,7 +112,8 @@ class Interface_RPC:
             if len(input_value) == 11:
                 self.operation = "valida_CPF"
                 self.values = [input_value]
-                return self.return_values()
+                if self.operation_callback:
+                    self.operation_callback(self.operation, self.values)
             else:
                 messagebox.showerror("Erro", "Forneça um CPF(somente número)")
 
@@ -114,20 +126,20 @@ class Interface_RPC:
                 if number > 0:
                     self.operation = "last_news_if_barbacena"
                     self.values = [int(input_value)]
-                    return self.return_values()
+                    if self.operation_callback:
+                        self.operation_callback(self.operation, self.values)
                 else:
                     messagebox.showerror("Erro", "Digite um número maior que 0.")
             except ValueError:
                 messagebox.showerror("Erro", "Digite um número válido e inteiro.")
     
-
     def return_values(self):
         print("Operação:", self.operation)
         print("Valores:", self.values)
         return self.operation, self.values
     
     def print_result(self, result):
-        messagebox.showinfo("Resultado Operações:", "A operação: " + str(self.values[0]) + " " + str(self.operation) + " "+ str(self.values[1])+ " é igual a= " + str(result))
+        messagebox.showinfo("Resultado Operações:", "A operação: " + str(self.values[0]) + " " + str(self.operation) + " " + str(self.values[1]) + " é igual a= " + str(result))
     
     def print_validate_CPF(self, result):
         messagebox.showinfo("Resultado CPF", "O cpf: " + str(self.values[0]) + " é válido= " + str(result))
@@ -136,15 +148,13 @@ class Interface_RPC:
         messagebox.showinfo("Resultado número primo", "O número: " + str(self.values[0]) + " é primo? " + str(result))
 
     def print_noticias(self, result):
-    #     messagebox.showinfo("Resultado Notícias Ifet:", "Número de notícias pesquisadas: " + str(self.values[0]) + "\nResultado:\n" + str(result))
-        self.master = tk.Tk()
-        self.master.title("Resultado Notícias Ifet")
+        result_window = tk.Toplevel(self.master)
+        result_window.title("Resultado Notícias Ifet")
 
         # Adiciona uma área de texto com barra de rolagem
-        text_area = scrolledtext.ScrolledText(self.master, wrap=tk.WORD, width=150, height=40)
+        text_area = scrolledtext.ScrolledText(result_window, wrap=tk.WORD, width=150, height=40)
         text_area.pack(expand=True, fill="both")
 
         # Adiciona o resultado à área de texto
         text_area.insert(tk.END, "Número de notícias pesquisadas: " + str(self.values[0]) + "\nResultado:\n" + str(result))
-
-        self.master.mainloop()
+        result_window.mainloop()

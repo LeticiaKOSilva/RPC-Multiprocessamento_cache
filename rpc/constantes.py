@@ -24,7 +24,7 @@ class Constantes:
     
     #Referente aos símbolos das operações matemáticas
     SIM_SUM = "+"
-    SIM_SUB ="-"
+    SIM_SUB = "-"
     SIM_MUL = "*"
     SIM_DIV = "/"
 
